@@ -128,7 +128,7 @@
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_GT2560_REV_A
+  #define MOTHERBOARD BOARD_GT2560_REV_A_PLUS
 #endif
 
 // Name displayed in the LCD "Ready" message and Info menu
@@ -364,7 +364,7 @@
  *   202 : 200k thermistor - Copymaster 3D
  *     3 : Mendel-parts thermistor (4.7k pullup)
  *     4 : 10k thermistor !! do not use it for a hotend. It gives bad resolution at high temp. !!
- *     5 : 100K thermistor - ATC Semitec 104GT-2/104NT-4-R025H42G (Used in ParCan & J-Head) (4.7k pullup)
+ *     5 : 100K thermistor - ATC Semitec 104GT-2/104NT-4-R025H42G (Used in ParCan, J-Head, and E3D) (4.7k pullup)
  *   501 : 100K Zonestar (Tronxy X3A) Thermistor
  *   512 : 100k RPW-Ultra hotend thermistor (4.7k pullup)
  *     6 : 100k EPCOS - Not as accurate as table 1 (created using a fluke thermocouple) (4.7k pullup)
@@ -373,7 +373,7 @@
  *     8 : 100k 0603 SMD Vishay NTCS0603E3104FXT (4.7k pullup)
  *     9 : 100k GE Sensing AL03006-58.2K-97-G1 (4.7k pullup)
  *    10 : 100k RS thermistor 198-961 (4.7k pullup)
- *    11 : 100k beta 3950 1% thermistor (4.7k pullup)
+ *    11 : 100k beta 3950 1% thermistor (Used in Keenovo AC silicone mats and most Wanhao i3 machines) (4.7k pullup)
  *    12 : 100k 0603 SMD Vishay NTCS0603E3104FXT (4.7k pullup) (calibrated for Makibox hot bed)
  *    13 : 100k Hisens 3950  1% up to 300°C for hotend "Simple ONE " & "Hotend "All In ONE"
  *    15 : 100k thermistor calibration for JGAurora A5 hotend
@@ -395,7 +395,7 @@
  *    52 : 200k thermistor - ATC Semitec 204GT-2 (1k pullup)
  *    55 : 100k thermistor - ATC Semitec 104GT-2 (Used in ParCan & J-Head) (1k pullup)
  *
- *  1047 : Pt1000 with 4k7 pullup
+ *  1047 : Pt1000 with 4k7 pullup (E3D)
  *  1010 : Pt1000 with 1k pullup (non standard)
  *   147 : Pt100 with 4k7 pullup
  *   110 : Pt100 with 1k pullup (non standard)
@@ -632,7 +632,7 @@
 #define USE_ZMIN_PLUG
 //#define USE_XMAX_PLUG
 //#define USE_YMAX_PLUG
-//#define USE_ZMAX_PLUG
+#define USE_ZMAX_PLUG
 
 // Enable pullup for all endstops to prevent a floating state
 #define ENDSTOPPULLUPS
@@ -757,7 +757,7 @@
  * Override with M203
  *                                      X, Y, Z, E0 [, E1[, E2...]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 400, 400, 5, 45 }
+#define DEFAULT_MAX_FEEDRATE          { 400, 400, 2, 45 }
 
 //#define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
 #if ENABLED(LIMITED_MAX_FR_EDITING)
@@ -840,15 +840,18 @@
 // @section probes
 
 //
-// See http://marlinfw.org/docs/configuration/probes.html
+// See https://marlinfw.org/docs/configuration/probes.html
 //
 
 /**
- * Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
- *
- * Enable this option for a probe connected to the Z Min endstop pin.
+ * Enable this option for a probe connected to the Z-MIN pin.
+ * The probe replaces the Z-MIN endstop and is used for Z homing.
+ * (Automatically enables USE_PROBE_FOR_Z_HOMING.)
  */
-#define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
+//#define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
+
+// Force the use of the probe for Z-axis homing
+//#define USE_PROBE_FOR_Z_HOMING
 
 /**
  * Z_MIN_PROBE_PIN
@@ -867,6 +870,7 @@
  *
  */
 //#define Z_MIN_PROBE_PIN 32 // Pin 32 is the RAMPS default
+#define Z_MIN_PROBE_PIN 32
 
 /**
  * Probe Type
@@ -983,7 +987,7 @@
 #define MIN_PROBE_EDGE 10
 
 // X and Y axis travel speed (mm/m) between probes
-#define XY_PROBE_SPEED 3000
+#define XY_PROBE_SPEED 8000
 
 // Feedrate (mm/m) for the first approach when double-probing (MULTIPLE_PROBING == 2)
 #define Z_PROBE_SPEED_FAST (20*60)
@@ -1084,13 +1088,11 @@
 
 // For direct drive extruder v9 set to true, for geared extruder set to false.
 #define INVERT_E0_DIR true
-#define INVERT_E1_DIR false
-#define INVERT_E2_DIR false
-#define INVERT_E3_DIR false
-#define INVERT_E4_DIR false
-#define INVERT_E5_DIR false
-#define INVERT_E6_DIR false
-#define INVERT_E7_DIR false
+#define INVERT_E1_DIR true
+#define INVERT_E2_DIR true
+#define INVERT_E3_DIR true
+#define INVERT_E4_DIR true
+#define INVERT_E5_DIR true
 
 // @section homing
 
@@ -1112,8 +1114,8 @@
 // @section machine
 
 // The size of the print bed
-#define X_BED_SIZE 180
-#define Y_BED_SIZE 180
+#define X_BED_SIZE 200
+#define Y_BED_SIZE 200
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
 #define X_MIN_POS -12
@@ -1224,8 +1226,8 @@
  */
 //#define AUTO_BED_LEVELING_3POINT
 //#define AUTO_BED_LEVELING_LINEAR
-//#define AUTO_BED_LEVELING_BILINEAR
-#define AUTO_BED_LEVELING_UBL
+#define AUTO_BED_LEVELING_BILINEAR
+//#define AUTO_BED_LEVELING_UBL
 //#define MESH_BED_LEVELING
 
 /**
@@ -1331,7 +1333,7 @@
  * Add a bed leveling sub-menu for ABL or MBL.
  * Include a guided procedure if manual probing is enabled.
  */
-#define LCD_BED_LEVELING
+//#define LCD_BED_LEVELING
 
 #if ENABLED(LCD_BED_LEVELING)
   #define MESH_EDIT_Z_STEP  0.025 // (mm) Step size while manually probing Z axis.
@@ -1424,7 +1426,7 @@
 #if ENABLED(SKEW_CORRECTION)
   // Input all length measurements here:
   #define XY_DIAG_AC 282.8427124746
-  #define XY_DIAG_BD 282.8427124746
+  #define XY_DIAG_BD 281.8196945719
   #define XY_SIDE_AD 200
 
   // Or, set the default skew factors directly here
@@ -1461,8 +1463,8 @@
  *   M501 - Read settings from EEPROM. (i.e., Throw away unsaved changes)
  *   M502 - Revert settings to "factory" defaults. (Follow with M500 to init the EEPROM.)
  */
-#define EEPROM_SETTINGS     // Persistent storage with M500 and M501
-#define DISABLE_M503        // Saves ~2700 bytes of PROGMEM. Disable for release!
+#define EEPROM_SETTINGS       // Persistent storage with M500 and M501
+#define DISABLE_M503          // Saves ~2700 bytes of PROGMEM. Disable for release!
 #define EEPROM_CHITCHAT       // Give feedback on EEPROM commands. Disable to save PROGMEM.
 #define EEPROM_BOOT_SILENT    // Keep M503 quiet and only give errors during first load
 #if ENABLED(EEPROM_SETTINGS)
@@ -1617,7 +1619,7 @@
  *
  * View the current statistics with M78.
  */
-//#define PRINTCOUNTER
+#define PRINTCOUNTER
 
 //=============================================================================
 //============================= LCD and SD support ============================
@@ -1630,10 +1632,10 @@
  *
  * Select the language to display on the LCD. These languages are available:
  *
- *   en, an, bg, ca, cz, da, de, el, el_gr, es, eu, fi, fr, gl, hr, it, jp_kana,
- *   ko_KR, nl, pl, pt, pt_br, ru, sk, tr, uk, vi, zh_CN, zh_TW, test
+ *   en, an, bg, ca, cz, da, de, el, el_gr, es, eu, fi, fr, gl, hr, hu, it,
+ *   jp_kana, ko_KR, nl, pl, pt, pt_br, ru, sk, tr, uk, vi, zh_CN, zh_TW, test
  *
- * :{ 'en':'English', 'an':'Aragonese', 'bg':'Bulgarian', 'ca':'Catalan', 'cz':'Czech', 'da':'Danish', 'de':'German', 'el':'Greek', 'el_gr':'Greek (Greece)', 'es':'Spanish', 'eu':'Basque-Euskera', 'fi':'Finnish', 'fr':'French', 'gl':'Galician', 'hr':'Croatian', 'it':'Italian', 'jp_kana':'Japanese', 'ko_KR':'Korean (South Korea)', 'nl':'Dutch', 'pl':'Polish', 'pt':'Portuguese', 'pt_br':'Portuguese (Brazilian)', 'ru':'Russian', 'sk':'Slovak', 'tr':'Turkish', 'uk':'Ukrainian', 'vi':'Vietnamese', 'zh_CN':'Chinese (Simplified)', 'zh_TW':'Chinese (Traditional)', 'test':'TEST' }
+ * :{ 'en':'English', 'an':'Aragonese', 'bg':'Bulgarian', 'ca':'Catalan', 'cz':'Czech', 'da':'Danish', 'de':'German', 'el':'Greek', 'el_gr':'Greek (Greece)', 'es':'Spanish', 'eu':'Basque-Euskera', 'fi':'Finnish', 'fr':'French', 'gl':'Galician', 'hr':'Croatian', 'hu':'Hungarian', 'it':'Italian', 'jp_kana':'Japanese', 'ko_KR':'Korean (South Korea)', 'nl':'Dutch', 'pl':'Polish', 'pt':'Portuguese', 'pt_br':'Portuguese (Brazilian)', 'ru':'Russian', 'sk':'Slovak', 'tr':'Turkish', 'uk':'Ukrainian', 'vi':'Vietnamese', 'zh_CN':'Chinese (Simplified)', 'zh_TW':'Chinese (Traditional)', 'test':'TEST' }
  */
 #define LCD_LANGUAGE en
 
@@ -1655,7 +1657,7 @@
  *  - Click the controller to view the LCD menu
  *  - The LCD will display Japanese, Western, or Cyrillic text
  *
- * See http://marlinfw.org/docs/development/lcd_language.html
+ * See https://marlinfw.org/docs/development/lcd_language.html
  *
  * :['JAPANESE', 'WESTERN', 'CYRILLIC']
  */
@@ -2088,7 +2090,7 @@
 //#define DGUS_LCD_UI_HIPRECY
 
 //
-// Touch-screen LCD for Malyan M200 printers
+// Touch-screen LCD for Malyan M200/M300 printers
 //
 //#define MALYAN_LCD
 
@@ -2183,7 +2185,6 @@
 //#define PCA9632
 
 // Support for PCA9533 PWM LED driver
-// https://github.com/mikeshub/SailfishRGB_LED
 //#define PCA9533
 
 /**

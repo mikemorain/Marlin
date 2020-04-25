@@ -45,7 +45,14 @@
 #define Y_MAX_PIN                             28
 #define Z_MIN_PIN                             30
 #define Z_MAX_PIN                             32
-
+// Added for BL_Touch
+#if ENABLED(BLTOUCH)
+     #define Z_MAX_PIN -1
+     #define SERVO0_PIN 32
+#else
+     #define Z_MAX_PIN 32
+     #define SERVO0_PIN 13
+#endif
 //
 // Steppers
 //
