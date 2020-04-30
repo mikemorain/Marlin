@@ -976,7 +976,9 @@
  *
  * Specify a Probe position as { X, Y, Z }
  */
-#define NOZZLE_TO_PROBE_OFFSET { 4, -44, -1.4 }
+
+// Recv: Probe Offset X-25.00 Y-41.00 Z-2.60
+#define NOZZLE_TO_PROBE_OFFSET { -25, -41, -2.04 } // Changed after nozzle replacement.
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
@@ -1112,12 +1114,12 @@
 // @section machine
 
 // The size of the print bed
-#define X_BED_SIZE 180
-#define Y_BED_SIZE 180
+#define X_BED_SIZE 190
+#define Y_BED_SIZE 200
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
 #define X_MIN_POS -12
-#define Y_MIN_POS -8
+#define Y_MIN_POS 0
 #define Z_MIN_POS 0
 #define X_MAX_POS (-X_MIN_POS+X_BED_SIZE)
 #define Y_MAX_POS (-Y_MIN_POS+Y_BED_SIZE)
